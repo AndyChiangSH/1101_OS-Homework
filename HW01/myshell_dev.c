@@ -1,10 +1,3 @@
-/*
-OS homework01 - myshell source code
-author: AndyChiang
-time: 2021/12/01
-Don't copy without permission!
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -89,6 +82,7 @@ int main(int argc, char **argv) {
 		else if(strlen(ss_ptr) == 0) {
 			continue;
 		}
+		// printf("ss: %s\n", ss_ptr);
 		
 		strcpy(ss2_ptr, ss_ptr);
 
@@ -102,20 +96,21 @@ int main(int argc, char **argv) {
 		if(arg == NULL) {	// ss only space
 			continue;
 		}
-		add_history(ss2_ptr);	// add into history buffer
+		add_history(ss_ptr);	// add into history buffer
 		
 		while(arg != NULL) {
-			if(strcmp(arg, ">") == 0) {	// file redirection: overwrite
+			// printf("%s\n", arg);
+			if(strcmp(arg, ">") == 0) {
 				read_mode = 1;
 				output_mode = 1;
 				fout_name = strtok(NULL, " ");
 			}
-			else if(strcmp(arg, ">>") == 0) {	// file redirection: append
+			else if(strcmp(arg, ">>") == 0) {
 				read_mode = 1;
 				output_mode = 2;
 				fout_name = strtok(NULL, " ");
 			}
-			else if(strcmp(arg, "&") == 0) {	// background execution
+			else if(strcmp(arg, "&") == 0) {
 				read_mode = 1;
 				bg_mode = 1;
 			}
@@ -124,6 +119,8 @@ int main(int argc, char **argv) {
 			}
 			arg = strtok(NULL, " ");
 		}
+		// printf("arg_num: %d\n", arg_num);
+		// printf("args_num = %d, bg_mode = %d, output_mode = %d, fout_name = %s\n", args_num, bg_mode, output_mode, fout_name);
 		
 		// output redirection: overwrite or append
 		int fn, copy;
@@ -147,25 +144,33 @@ int main(int argc, char **argv) {
 		for(i = 1; i < args_num; i++) {
 			arg = strtok(NULL, " ");
 			args[i] = arg;
-			strcat(arg_cat, arg);	// concatenate arguments that before redirection or background
+			strcat(arg_cat, arg);	// concatenate arguments before redirection or background
 			if(i != args_num-1) {
 				strcat(arg_cat, " ");
 			}
 		}
 		args[args_num] = NULL;
+		// printf("cat: %s\n", arg_cat);
 		
-		// case of command
+		
 		if(strcmp(args[0], "cd") == 0) {
+			// arg = strtok(NULL, "");
+			// printf("second: %s\n", arg);
 			chdir(args[1]);
 		}
 		else if(strcmp(args[0], "pwd") == 0) {
 			printf("%s\n", buffer);
 		}
 		else if(strcmp(args[0], "echo") == 0) {
+			// arg = strtok(NULL, "");
 			printf("%s\n", arg_cat);
 		}
 		else if(strcmp(args[0], "export") == 0) {
+			// printf("PATH: %s\n", getenv("PATH"));
+			// arg = strtok(NULL, "");
+			// printf("%s\n", arg);
 			setenv("PATH", arg_cat, 1);
+
 			printf("PATH: %s\n", getenv("PATH"));
 		}
 		else if(strcmp(args[0], "help") == 0) {
@@ -191,24 +196,23 @@ int main(int argc, char **argv) {
 			printf("------------------------------------------------\n\n");
 		}
 		else if(strcmp(args[0], "history") == 0) {
-			// get history buffer
 			HIST_ENTRY **hist_list = history_list();
 			if(hist_list) {
 				printf("Total history in buffer: %d\n", history_length);
-				if(args_num == 1) {	// all history
+				if(args_num == 1) {
 					for(i = 0; hist_list[i]; i++) {
 						printf("%4d: %s\n", i+history_base, hist_list[i]->line);
 					}
 				}
 				else {
-					if(isNumber(args[1])) {	// top number history
+					if(isNumber(args[1])) {
 						int hist_offset = atoi(args[1]);
 						for(i = max(history_length-hist_offset, 0); i < history_length; i++) {
 							printf("%4d: %s\n", i+history_base, hist_list[i]->line);
 						}					
 					}
 					else {
-						if(strcmp(args[1], "-clear") == 0) {	// clear history
+						if(strcmp(args[1], "-clear") == 0) {
 							clear_history();
 							fhist = fopen(".history_file", "w");
 							fclose(fhist);
@@ -224,7 +228,7 @@ int main(int argc, char **argv) {
 			}
 			
 		}
-		else {	// external command
+		else {
 			pid_t pid;
 			pid = fork();
 			if(pid < 0) {
@@ -241,12 +245,11 @@ int main(int argc, char **argv) {
 				if(bg_mode == 0) {
 					wait(NULL);
 				}
+				// printf("pid = %d, child pid = %d\n", getpid(), pid);
 			}
 		}
 		
-		// clear stdout buffer
 		fflush(stdout);
-		// recover stdout
 		if(output_mode == 1 || output_mode == 2) {
 			dup2(copy, 1);
 			fclose(fout);

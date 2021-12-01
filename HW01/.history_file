@@ -4,3 +4,24 @@ echo 2
 echo 3
 ls -l
 history
+ls
+echo
+echo
+echo
+cd
+cd
+ls
+cd
+history
+history
+sleep
+cat
+cat > b
+history
+cat a
+cat >> a
+cat a
+sleep 10 &
+cat >> a
+cat a
+help
