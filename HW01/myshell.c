@@ -41,7 +41,7 @@ int isNumber(char* str) {
 
 void shell_init() {
 	printf("\033[0;36m");
-	printf("------------------------------------------------\n\n");
+	printf("\n------------------------------------------------\n\n");
 	printf("        Hi, %s. Welcome to myshell!\n\n", getenv("USER"));
 	printf("   You can use 'help' to get more information\n");
 	printf("                about myshell.\n\n");
@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
 	shell_init();
 	while(1) {
 		char* username = getenv("USER");
-		sprintf(ps, "%s@%s: ", username, getcwd(buffer, sizeof(buffer)));
+		sprintf(ps, "\033[0;32m%s\033[0;0m@\033[0;33m%s\033[0;0m: ", username, getcwd(buffer, sizeof(buffer)));
 		ss_ptr = readline(ps);
 		if(ss_ptr == NULL) {
 			fflush(stdout);
@@ -163,7 +163,7 @@ int main(int argc, char **argv) {
 			printf("PATH: %s\n", getenv("PATH"));
 		}
 		else if(strcmp(args[0], "help") == 0) {
-			printf("----------Welcom to myshell help page----------\n\n");
+			printf("\n----------Welcom to myshell help page----------\n\n");
 			printf("We support these command below:\n");
 			printf("cd: cd [dir_path]\n");
 			printf("\tMove to other directory.\n");
@@ -181,7 +181,7 @@ int main(int argc, char **argv) {
 			printf("\tPrint help page.\n");
 			printf("External command: like ls, cp, rm...\n");
 			printf("We also support background execution (&) and output redirection (>, >>)\n\n");
-			printf("------------------------------------------------\n");
+			printf("------------------------------------------------\n\n");
 		}
 		else if(strcmp(args[0], "history") == 0) {
 			HIST_ENTRY **hist_list = history_list();

@@ -1,10 +1,6 @@
 history
+echo 1
+echo 2
+echo 3
+ls -l
 history
-cat .history_file
-vim .history_file
-history
-help
-help 1
-help
-help
-help
