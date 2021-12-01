@@ -1,0 +1,5 @@
+history
+history
+cat .history_file
+vim .history_file
+history
