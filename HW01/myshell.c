@@ -39,6 +39,19 @@ int isNumber(char* str) {
 	return 1;
 }
 
+void shell_init() {
+	printf("\033[0;36m");
+	printf("------------------------------------------------\n\n");
+	printf("        Hi, %s. Welcome to myshell!\n\n", getenv("USER"));
+	printf("   You can use 'help' to get more information\n");
+	printf("                about myshell.\n\n");
+	printf("      And... have fun with myshell! (ﾉ>ω<)ﾉ\n\n");
+	printf("         copyright @ 2021 AndyChiang\n\n");
+	printf("------------------------------------------------\n\n");
+	printf("\033[0;0m");
+	return;
+}
+
 int main(int argc, char **argv) {
 	int i;
 	char* ps;
@@ -50,6 +63,7 @@ int main(int argc, char **argv) {
 	signal(SIGCHLD, SIGCHLD_handler);
 	using_history();
 	read_history(".history_file");
+	shell_init();
 	while(1) {
 		char* username = getenv("USER");
 		sprintf(ps, "%s@%s: ", username, getcwd(buffer, sizeof(buffer)));
@@ -147,6 +161,27 @@ int main(int argc, char **argv) {
 			setenv("PATH", arg_cat, 1);
 
 			printf("PATH: %s\n", getenv("PATH"));
+		}
+		else if(strcmp(args[0], "help") == 0) {
+			printf("----------Welcom to myshell help page----------\n\n");
+			printf("We support these command below:\n");
+			printf("cd: cd [dir_path]\n");
+			printf("\tMove to other directory.\n");
+			printf("pwd: pwd\n");
+			printf("\tPrint current working directory.\n");
+			printf("echo: echo [text]\n");
+			printf("\tPrint Print text.\n");
+			printf("export: export [PATH_variable]\n");
+			printf("\tSet PATH variable.\n");
+			printf("history: history [-clear] [number]\n");
+			printf("\tPrint history command.\n");
+			printf("\t[number]: Print top number history command.\n");
+			printf("\t[-clear]: Clear history.\n");
+			printf("help: help\n");
+			printf("\tPrint help page.\n");
+			printf("External command: like ls, cp, rm...\n");
+			printf("We also support background execution (&) and output redirection (>, >>)\n\n");
+			printf("------------------------------------------------\n");
 		}
 		else if(strcmp(args[0], "history") == 0) {
 			HIST_ENTRY **hist_list = history_list();
