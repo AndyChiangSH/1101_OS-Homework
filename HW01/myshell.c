@@ -2,6 +2,7 @@
 OS homework01 - myshell source code
 author: AndyChiang
 time: 2021/12/01
+line: 256
 Don't copy without permission!
 */
 
@@ -228,17 +229,17 @@ int main(int argc, char **argv) {
 			pid_t pid;
 			pid = fork();
 			if(pid < 0) {
-				printf("ERROR: fork\n");
+				printf("[ERROR] Fork failed.\n");
 				exit(-1);
 			}
 			else if (pid == 0) {	// child process
 				if(execvp(args[0], args) == -1) {
-					printf("ERROR: Command '%s' not found.\n", args[0]);
+					printf("[ERROR] Command '%s' not found.\n", args[0]);
 				}
 				exit(0);
 			}
 			else {		// parent process
-				if(bg_mode == 0) {
+				if(bg_mode == 0) {	// not background mode
 					wait(NULL);
 				}
 			}
