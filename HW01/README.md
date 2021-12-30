@@ -1,4 +1,4 @@
-# HW01 - myshell
+# HW01 - Myshell
 > 用C寫個自己的shell
 
 ## 功能
